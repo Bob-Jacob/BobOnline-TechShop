@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${product.name + ' - Digital Store'}">Товар</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <div th:replace="~{fragments/header :: navbar}"></div>
+
+<main class="container my-4 flex-grow-1">
+
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div class="row" th:if="${product}">
+
+        <div class="col-md-6 mb-4">
+            <img class="img-fluid rounded shadow"
+                 th:src="${product.imageUrl != null and !product.imageUrl.isEmpty()
+                         ? product.imageUrl
+                         : 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iIzYzNjZmMSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMzIiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5Qcm9kdWN0PC90ZXh0Pjwvc3ZnPg=='}"
+                 style="max-height:500px; object-fit:cover; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);"
+                 alt="Product image"
+                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNjAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iIzYzNjZmMSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMzIiIGZpbGw9IiNmZmZmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5Qcm9kdWN0PC90ZXh0Pjwvc3ZnPg==';">
+        </div>
+
+        <div class="col-md-6">
+
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                    <li class="breadcrumb-item"><a href="/products">Каталог</a></li>
+                    <li class="breadcrumb-item active" th:text="${product.category.displayName}"></li>
+                </ol>
+            </nav>
+
+            <h1 th:text="${product.name}"></h1>
+            <span class="badge bg-primary mb-3" th:text="${product.category.displayName}"></span>
+
+            <div class="d-flex align-items-center mb-3">
+                <div class="me-3">
+                    <h2 class="text-primary mb-0" th:if="${product.discountPercent == null or product.discountPercent == 0}"
+                        th:text="${#numbers.formatDecimal(product.price,0,'COMMA',2,'POINT') + ' ₽'}"></h2>
+                    <div th:if="${product.discountPercent != null and product.discountPercent > 0}">
+                        <h2 class="text-primary mb-0" th:text="${#numbers.formatDecimal(product.getFinalPrice(),0,'COMMA',2,'POINT') + ' ₽'}"></h2>
+                        <div class="d-flex align-items-center gap-2">
+                            <small class="text-muted text-decoration-line-through" 
+                                   th:text="${#numbers.formatDecimal(product.price,0,'COMMA',2,'POINT') + ' ₽'}"></small>
+                            <span class="badge bg-danger" th:text="'-' + ${product.discountPercent} + '%'"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <span class="badge bg-success" th:if="${product.stock > 10}">
+                    <i class="bi bi-check-circle"></i> В наличии
+                </span>
+            </div>
+            
+            <!-- Рейтинг товара -->
+            <div class="mb-3" th:if="${product.averageRating != null}">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="d-flex">
+                        <span th:each="i : ${#numbers.sequence(1, 5)}">
+                            <i class="bi" 
+                               th:class="${i <= product.averageRating.intValue()} ? 'bi-star-fill text-warning' : 'bi-star'"
+                               style="font-size: 1.2rem;"></i>
+                        </span>
+                    </div>
+                    <span class="fw-bold" th:text="${#numbers.formatDecimal(product.averageRating, 1, 'COMMA', 1, 'POINT')}"></span>
+                    <span class="text-muted" th:text="'(' + ${product.reviewsCount} + ' отзывов)'"></span>
+                </div>
+            </div>
+
+            <p th:text="${product.description ?: 'Описание отсутствует'}"></p>
+
+            <div class="mb-3">
+                <span class="badge fs-6"
+                      th:class="${product.stock > 0} ? 'bg-success' : 'bg-danger'"
+                      th:text="${product.stock > 0}
+                               ? 'В наличии (' + ${product.stock} + ' шт.)'
+                               : 'Нет в наличии'">
+                </span>
+            </div>
+
+            <div sec:authorize="isAuthenticated()">
+
+                <div th:if="${product.stock > 0}">
+                    <label for="quantity" class="form-label">Количество</label>
+                    <input id="quantity" type="number"
+                           class="form-control form-control-lg mb-3"
+                           value="1" min="1"
+                           th:max="${product.stock}">
+
+                    <div class="d-flex gap-2">
+                        <button type="button" 
+                                class="btn btn-primary btn-lg flex-fill add-to-cart-btn"
+                                th:data-product-id="${product.id}">
+                            <i class="bi bi-cart-plus"></i> Добавить в корзину
+                        </button>
+
+                        <button type="button" 
+                                class="btn btn-outline-danger btn-lg favorite-btn"
+                                th:data-product-id="${product.id}">
+                            <i class="bi bi-heart"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning mt-3" th:if="${product.stock == 0}">
+                    <i class="bi bi-exclamation-triangle"></i> Товар временно недоступен
+                </div>
+            </div>
+
+            <div sec:authorize="!isAuthenticated()">
+                <div class="alert alert-info">
+                    Для покупки необходимо войти
+                </div>
+                <a href="/login" class="btn btn-primary btn-lg w-100">
+                    Войти
+                </a>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- Отзывы и рейтинг -->
+    <div class="row mt-5" th:if="${product}">
+        <div class="col-12">
+            <h3 class="mb-4">
+                <i class="bi bi-star"></i> Отзывы и рейтинг
+            </h3>
+            
+            <!-- Форма добавления отзыва -->
+            <div sec:authorize="isAuthenticated()" th:if="${canReview and !hasReviewed}" class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Оставить отзыв</h5>
+                </div>
+                <div class="card-body">
+                    <form id="reviewForm" th:data-product-id="${product.id}">
+                        <div class="mb-3">
+                            <label class="form-label">Рейтинг</label>
+                            <div class="rating-input">
+                                <input type="hidden" name="rating" id="rating-value" value="5" required>
+                                <div class="d-flex gap-1" id="rating-stars">
+                                    <i class="bi bi-star-fill text-warning" style="font-size: 1.5rem; cursor: pointer;" 
+                                       data-rating="1" onclick="Reviews.setRating(1)"></i>
+                                    <i class="bi bi-star-fill text-warning" style="font-size: 1.5rem; cursor: pointer;" 
+                                       data-rating="2" onclick="Reviews.setRating(2)"></i>
+                                    <i class="bi bi-star-fill text-warning" style="font-size: 1.5rem; cursor: pointer;" 
+                                       data-rating="3" onclick="Reviews.setRating(3)"></i>
+                                    <i class="bi bi-star-fill text-warning" style="font-size: 1.5rem; cursor: pointer;" 
+                                       data-rating="4" onclick="Reviews.setRating(4)"></i>
+                                    <i class="bi bi-star-fill text-warning" style="font-size: 1.5rem; cursor: pointer;" 
+                                       data-rating="5" onclick="Reviews.setRating(5)"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="review-comment" class="form-label">Комментарий</label>
+                            <textarea class="form-control" id="review-comment" name="comment" rows="4" 
+                                      placeholder="Оставьте ваш отзыв о товаре..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send"></i> Отправить отзыв
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div sec:authorize="isAuthenticated()" th:if="${hasReviewed}" class="alert alert-info mb-4">
+                <i class="bi bi-info-circle"></i> Вы уже оставили отзыв на этот товар
+            </div>
+            
+            <!-- Список отзывов -->
+            <div th:if="${reviews != null and !reviews.isEmpty()}">
+                <div class="mb-3">
+                    <h5 class="mb-3">Отзывы (<span th:text="${reviews.size()}"></span>)</h5>
+                </div>
+                <div class="card mb-2" th:each="review : ${reviews}">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <strong th:text="${review.user.email}"></strong>
+                                <div class="d-flex align-items-center gap-2 mt-1">
+                                    <div class="d-flex">
+                                        <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                            <i class="bi" 
+                                               th:class="${i <= review.rating} ? 'bi-star-fill text-warning' : 'bi-star'"
+                                               style="font-size: 0.9rem;"></i>
+                                        </span>
+                                    </div>
+                                    <small class="text-muted" th:text="${#temporals.format(review.createdAt, 'dd.MM.yyyy HH:mm')}"></small>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mb-0" th:text="${review.comment != null and !review.comment.isEmpty() ? review.comment : 'Без комментария'}"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div th:if="${reviews == null or reviews.isEmpty()}" class="alert alert-info">
+                <i class="bi bi-info-circle"></i> Пока нет одобренных отзывов. Будьте первым!
+            </div>
+        </div>
+    </div>
+</main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/favorites.js"></script>
+<script src="/js/reviews.js"></script>
+
+<script th:if="${product != null}" th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        Favorites.checkStatus([[${product.id}]]);
+        
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        
+        // Add event listeners for buttons
+        const addToCartBtn = document.querySelector('.add-to-cart-btn');
+        if (addToCartBtn) {
+            addToCartBtn.addEventListener('click', function(e) {
+                const productId = this.getAttribute('data-product-id');
+                const quantityInput = document.getElementById('quantity');
+                const quantity = quantityInput ? parseInt(quantityInput.value) || 1 : 1;
+                Cart.addToCart(parseInt(productId), quantity, e);
+            });
+        }
+        
+        const favoriteBtn = document.querySelector('.favorite-btn');
+        if (favoriteBtn) {
+            favoriteBtn.addEventListener('click', function(e) {
+                const productId = this.getAttribute('data-product-id');
+                Favorites.toggle(parseInt(productId), e);
+            });
+        }
+        
+        // Add review form submit handler
+        const reviewForm = document.getElementById('reviewForm');
+        if (reviewForm) {
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const productId = this.getAttribute('data-product-id');
+                if (productId) {
+                    Reviews.addReview(parseInt(productId), this);
+                } else {
+                    console.error('Product ID not found');
+                    if (typeof Utils !== 'undefined' && Utils.showNotification) {
+                        Utils.showNotification('Ошибка: ID товара не найден', 'danger');
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+
+</body>
+</html>

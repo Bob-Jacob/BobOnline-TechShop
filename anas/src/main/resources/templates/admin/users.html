@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление пользователями - Digital Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <div th:replace="~{fragments/header :: admin-navbar}"></div>
+
+    <main class="container my-4 flex-grow-1">
+        <h1 class="mb-4"><i class="bi bi-people"></i> Управление пользователями</h1>
+
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show">
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Роли</th>
+                        <th>Статус</th>
+                        <th>Заказов</th>
+                        <th>Ключей</th>
+                        <th>Дата регистрации</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}"></td>
+                        <td>
+                            <strong th:text="${user.email}"></strong>
+                        </td>
+                        <td>
+                            <span th:each="role : ${user.roles}" class="badge bg-secondary me-1" 
+                                  th:text="${role.name.name()}">
+                            </span>
+                            <span th:if="${user.roles == null or user.roles.isEmpty()}" class="text-muted">Нет ролей</span>
+                        </td>
+                        <td>
+                            <span class="badge" 
+                                  th:class="${user.enabled} ? 'bg-success' : 'bg-danger'"
+                                  th:text="${user.enabled} ? 'Активен' : 'Заблокирован'">
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge bg-info" 
+                                  th:text="${userStats[user.id]?.ordersCount ?: 0}">0</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-warning text-dark" 
+                                  th:text="${userStats[user.id]?.licenseKeysCount ?: 0}">0</span>
+                        </td>
+                        <td th:text="${#temporals.format(user.createdAt, 'dd.MM.yyyy HH:mm')}"></td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <form th:action="@{/admin/users/{id}/toggle-enabled(id=${user.id})}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-warning" 
+                                            th:title="${user.enabled} ? 'Заблокировать' : 'Разблокировать'">
+                                        <i class="bi" th:class="${user.enabled} ? 'bi-toggle-on' : 'bi-toggle-off'"></i>
+                                    </button>
+                                </form>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" 
+                                            data-bs-toggle="dropdown">
+                                        Роли
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li th:if="${user.roles.?[name.name() == 'ADMIN'].empty}">
+                                            <form th:action="@{/admin/users/{id}/add-role(id=${user.id})}" method="post" class="d-inline">
+                                                <input type="hidden" name="roleName" value="ADMIN">
+                                                <button type="submit" class="dropdown-item">
+                                                    <i class="bi bi-plus-circle"></i> Добавить ADMIN
+                                                </button>
+                                            </form>
+                                        </li>
+                                        <li th:if="${!user.roles.?[name.name() == 'ADMIN'].empty}">
+                                            <form th:action="@{/admin/users/{id}/remove-role(id=${user.id})}" method="post" class="d-inline">
+                                                <input type="hidden" name="roleName" value="ADMIN">
+                                                <button type="submit" class="dropdown-item text-danger">
+                                                    <i class="bi bi-x-circle"></i> Удалить ADMIN
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${users == null or users.isEmpty()}">
+                        <td colspan="8" class="text-center text-muted">Нет пользователей</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>

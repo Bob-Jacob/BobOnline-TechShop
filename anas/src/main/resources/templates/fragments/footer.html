@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <footer th:fragment="footer" class="footer mt-auto">
+        <div class="bg-dark text-light py-5" style="background: linear-gradient(135deg, #1f2937 0%, #111827 100%) !important;">
+            <div class="container">
+                <div class="row g-4">
+                    <!-- О магазине -->
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                        <div class="mb-4">
+                            <h4 class="mb-3 fw-bold">
+                                <i class="bi bi-shop text-primary"></i> Digital Store
+                            </h4>
+                            <p class="text-light opacity-75 mb-3" style="line-height: 1.8;">
+                                Ваш надежный магазин цифровых товаров. Лицензии, игры, программное обеспечение, подписки и многое другое по выгодным ценам.
+                            </p>
+                            <div class="social-links d-flex gap-3">
+                                <a href="#" class="text-light opacity-75 hover-primary" style="font-size: 1.5rem; transition: all 0.3s;" 
+                                   onmouseover="this.style.color='#6366f1'; this.style.transform='translateY(-3px)'" 
+                                   onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.transform='translateY(0)'">
+                                    <i class="bi bi-telegram"></i>
+                                </a>
+                                <a href="#" class="text-light opacity-75 hover-primary" style="font-size: 1.5rem; transition: all 0.3s;"
+                                   onmouseover="this.style.color='#6366f1'; this.style.transform='translateY(-3px)'" 
+                                   onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.transform='translateY(0)'">
+                                    <i class="bi bi-vk"></i>
+                                </a>
+                                <a href="mailto:support@digitalstore.ru" class="text-light opacity-75 hover-primary" style="font-size: 1.5rem; transition: all 0.3s;"
+                                   onmouseover="this.style.color='#6366f1'; this.style.transform='translateY(-3px)'" 
+                                   onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.transform='translateY(0)'">
+                                    <i class="bi bi-envelope"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Каталог -->
+                    <div class="col-lg-2 col-md-3 col-6 mb-4 mb-md-0">
+                        <h6 class="mb-3 fw-bold text-uppercase" style="font-size: 0.85rem; letter-spacing: 1px;">Каталог</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="/products" class="text-light opacity-75 text-decoration-none d-flex align-items-center" 
+                                   style="transition: all 0.3s;"
+                                   onmouseover="this.style.color='#fff'; this.style.paddingLeft='5px';"
+                                   onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.paddingLeft='0';">
+                                    <i class="bi bi-chevron-right me-1" style="font-size: 0.7rem;"></i> Все товары
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/products?category=GAME_LICENSE" class="text-light opacity-75 text-decoration-none d-flex align-items-center"
+                                   style="transition: all 0.3s;"
+                                   onmouseover="this.style.color='#fff'; this.style.paddingLeft='5px';"
+                                   onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.paddingLeft='0';">
+                                    <i class="bi bi-chevron-right me-1" style="font-size: 0.7rem;"></i> Лицензии игр
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/products?category=SOFTWARE_LICENSE" class="text-light opacity-75 text-decoration-none d-flex align-items-center"
+                                   style="transition: all 0.3s;"
+                                   onmouseover="this.style.color='#fff'; this.style.paddingLeft='5px';"
+                                   onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.paddingLeft='0';">
+                                    <i class="bi bi-chevron-right me-1" style="font-size: 0.7rem;"></i> Лицензии ПО
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/products?category=SUBSCRIPTION" class="text-light opacity-75 text-decoration-none d-flex align-items-center"
+                                   style="transition: all 0.3s;"
+                                   onmouseover="this.style.color='#fff'; this.style.paddingLeft='5px';"
+                                   onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.paddingLeft='0';">
+                                    <i class="bi bi-chevron-right me-1" style="font-size: 0.7rem;"></i> Подписки
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/products?category=VPN_SERVICE" class="text-light opacity-75 text-decoration-none d-flex align-items-center"
+                                   style="transition: all 0.3s;"
+                                   onmouseover="this.style.color='#fff'; this.style.paddingLeft='5px';"
+                                   onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.paddingLeft='0';">
+                                    <i class="bi bi-chevron-right me-1" style="font-size: 0.7rem;"></i> VPN-доступ
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/products?category=ONLINE_COURSE" class="text-light opacity-75 text-decoration-none d-flex align-items-center"
+                                   style="transition: all 0.3s;"
+                                   onmouseover="this.style.color='#fff'; this.style.paddingLeft='5px';"
+                                   onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.paddingLeft='0';">
+                                    <i class="bi bi-chevron-right me-1" style="font-size: 0.7rem;"></i> Онлайн-курсы
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Помощь -->
+                    <div class="col-lg-2 col-md-3 col-6 mb-4 mb-md-0">
+                        <h6 class="mb-3 fw-bold text-uppercase" style="font-size: 0.85rem; letter-spacing: 1px;">Помощь</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="/profile" class="text-light opacity-75 text-decoration-none d-flex align-items-center"
+                                   style="transition: all 0.3s;"
+                                   onmouseover="this.style.color='#fff'; this.style.paddingLeft='5px';"
+                                   onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.paddingLeft='0';">
+                                    <i class="bi bi-chevron-right me-1" style="font-size: 0.7rem;"></i> Профиль
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/orders" class="text-light opacity-75 text-decoration-none d-flex align-items-center"
+                                   style="transition: all 0.3s;"
+                                   onmouseover="this.style.color='#fff'; this.style.paddingLeft='5px';"
+                                   onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.paddingLeft='0';">
+                                    <i class="bi bi-chevron-right me-1" style="font-size: 0.7rem;"></i> Мои заказы
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/cart" class="text-light opacity-75 text-decoration-none d-flex align-items-center"
+                                   style="transition: all 0.3s;"
+                                   onmouseover="this.style.color='#fff'; this.style.paddingLeft='5px';"
+                                   onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.paddingLeft='0';">
+                                    <i class="bi bi-chevron-right me-1" style="font-size: 0.7rem;"></i> Корзина
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="/favorites" class="text-light opacity-75 text-decoration-none d-flex align-items-center"
+                                   style="transition: all 0.3s;"
+                                   onmouseover="this.style.color='#fff'; this.style.paddingLeft='5px';"
+                                   onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.paddingLeft='0';">
+                                    <i class="bi bi-chevron-right me-1" style="font-size: 0.7rem;"></i> Избранное
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Контакты -->
+                    <div class="col-lg-4 col-md-6">
+                        <h6 class="mb-3 fw-bold text-uppercase" style="font-size: 0.85rem; letter-spacing: 1px;">Контакты</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-3 d-flex align-items-start">
+                                <i class="bi bi-envelope-fill text-primary me-3 mt-1" style="font-size: 1.2rem;"></i>
+                                <div>
+                                    <a href="mailto:support@digitalstore.ru" class="text-light opacity-75 text-decoration-none"
+                                       style="transition: all 0.3s;"
+                                       onmouseover="this.style.color='#fff'; this.style.opacity='1';"
+                                       onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.opacity='0.75';">
+                                        support@digitalstore.ru
+                                    </a>
+                                </div>
+                            </li>
+                            <li class="mb-3 d-flex align-items-start">
+                                <i class="bi bi-clock-fill text-primary me-3 mt-1" style="font-size: 1.2rem;"></i>
+                                <div class="text-light opacity-75">
+                                    <div class="fw-semibold">Время работы:</div>
+                                    <div>Пн-Пт: 9:00 - 21:00</div>
+                                    <div>Сб-Вс: 10:00 - 18:00</div>
+                                </div>
+                            </li>
+                            <li class="mb-3 d-flex align-items-start">
+                                <i class="bi bi-telephone-fill text-primary me-3 mt-1" style="font-size: 1.2rem;"></i>
+                                <div>
+                                    <a href="tel:+79991234567" class="text-light opacity-75 text-decoration-none"
+                                       style="transition: all 0.3s;"
+                                       onmouseover="this.style.color='#fff'; this.style.opacity='1';"
+                                       onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.opacity='0.75';">
+                                        +7 (999) 123-45-67
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <p class="text-light opacity-75 mb-0">
+                            &copy; 2024 Digital Store. Все права защищены.
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="#" class="text-light opacity-75 text-decoration-none me-3"
+                           style="transition: all 0.3s; font-size: 0.9rem;"
+                           onmouseover="this.style.color='#fff'; this.style.opacity='1';"
+                           onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.opacity='0.75';">
+                            Политика конфиденциальности
+                        </a>
+                        <a href="#" class="text-light opacity-75 text-decoration-none"
+                           style="transition: all 0.3s; font-size: 0.9rem;"
+                           onmouseover="this.style.color='#fff'; this.style.opacity='1';"
+                           onmouseout="this.style.color='rgba(255,255,255,0.75)'; this.style.opacity='0.75';">
+                            Условия использования
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

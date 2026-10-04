@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оплата заказа - Digital Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <div th:replace="~{fragments/header :: navbar}"></div>
+
+    <main class="container my-4 flex-grow-1">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                <li class="breadcrumb-item"><a href="/orders">Мои заказы</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/order/{id}(id=${order.id})}">Заказ #<span th:text="${order.id}"></span></a></li>
+                <li class="breadcrumb-item active">Оплата</li>
+            </ol>
+        </nav>
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="mb-1">Оплата заказа #<span th:text="${order.id}"></span></h1>
+                <p class="text-muted mb-0">Безопасная оплата вашего заказа</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Детали платежа</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Сумма к оплате:</strong> 
+                            <span class="h4 text-primary" th:text="${#numbers.formatDecimal(payment.amount, 0, 'COMMA', 2, 'POINT') + ' ₽'}"></span>
+                        </p>
+                        <p><strong>Статус:</strong> 
+                            <span class="badge" 
+                                  th:class="${payment.status.name() == 'SUCCESS'} ? 'bg-success' : 
+                                           (${payment.status.name() == 'PENDING'} ? 'bg-warning' : 'bg-danger')"
+                                  th:text="${payment.status.displayName}">
+                            </span>
+                        </p>
+                        <div th:if="${payment.status.name() == 'PENDING'}">
+                            <div class="alert alert-info d-flex align-items-start">
+                                <i class="bi bi-info-circle me-2" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <strong>Демо-режим</strong>
+                                    <p class="mb-0">Это мок-платежная система. Нажмите кнопку ниже для симуляции успешной оплаты. 
+                                    После оплаты лицензионные ключи и ссылки на скачивание будут отправлены на ваш email.</p>
+                                </div>
+                            </div>
+                            <form th:action="@{/payment/{id}/process(id=${payment.id})}" method="post">
+                                <button type="submit" class="btn btn-success btn-lg w-100" 
+                                        data-bs-toggle="tooltip" 
+                                        title="Нажмите для завершения оплаты">
+                                    <i class="bi bi-check-circle"></i> Оплатить
+                                </button>
+                            </form>
+                        </div>
+                        <div th:if="${payment.status.name() == 'SUCCESS'}">
+                            <div class="alert alert-success">
+                                <i class="bi bi-check-circle"></i> Платеж успешно выполнен!
+                            </div>
+                            <p><strong>ID транзакции:</strong> <span th:text="${payment.transactionId}"></span></p>
+                            <a th:href="@{/order/{id}(id=${order.id})}" class="btn btn-primary w-100">
+                                <i class="bi bi-arrow-left"></i> Вернуться к заказу
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Состав заказа</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between" th:each="item : ${order.items}">
+                                <span th:text="${item.product.name + ' x' + item.quantity}"></span>
+                                <span th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'COMMA', 2, 'POINT') + ' ₽'}"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/carousel.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Tooltips.init();
+        });
+    </script>
+</body>
+</html>
